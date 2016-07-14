@@ -1,0 +1,34 @@
+mysql:
+wget http://dev.mysql.com/get/mysql-community-release-el7-5.noarch.rpm
+rpm -ivh mysql-community-release-el7-5.noarch.rpm
+yum install mysql-community-server
+
+
+zookeeper:
+http://jingyan.baidu.com/article/456c463b60bd380a5931446f.html
+
+kafka:
+1.scala:
+wget www.scala-lang.org/files/archive/scala-2.10.4.tgz
+tar –xzvf scala-2.10.4.tgz
+mv scala-2.10.4/ scala2.10/
+export SCALA_HOME=scala的绝对路径
+export PATH=$PATH:$SCALA_HOME/bin
+
+2.kafka:
+wget -q http://apache.fayea.com/apache-mirror/kafka/0.8.1/kafka_2.8.0-0.8.1.tgz
+tar -xzvf kafka_2.8.0-0.8.1.tgz  
+rm kafka_2.8.0-0.8.1.tgz  
+cd kafka_2.8.0-0.8.1  
+export KAFKA_HOME=kafka的绝对路径
+export PATH=$PATH:$KAFKA_HOME/bin
+
+etcd:
+yum install etcd -y
+
+python:
+yum install gcc libffi-devel python-devel openssl-devel
+easy_install pip
+pip install MySQL-python
+
+
