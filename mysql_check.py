@@ -37,19 +37,25 @@ def execute(command,name):
 		conn.close()
 	except MySQLdb.Error,e:
 		logger.error("Mysql Error %d: %s" % (e.args[0], e.args[1]))
-		return
+
 	if(name ==''):
-		return tmp
+		for i in tmp:
+			ll = ''
+			for j in i:
+				ll=ll + ' ' + j
+			logger.info(ll)
+		return
+
 	logger.debug("The %s is successful!" %(name))
 
-init()
-execute('insert into test(u,v) value(\'wym\',\'510\')','insertion')
-execute('select * from test','selection')
-execute('update test set u=\'510\' where u=\'wym\'','modification')
-execute('delete from test where v=\'510\'','deletion')
-tmp=execute('show status','')
-for i in tmp:
-	ll = ''
-	for j in i:
-		ll=ll + ' ' + j
-	logger.info(ll)
+if __name__ == "__main__":
+	init()
+	execute('insert into test(u,v) value(\'wym\',\'510\')','insertion')
+	execute('select * from test','selection')
+	execute('update test set u=\'510\' where u=\'wym\'','modification')
+	execute('delete from test where v=\'510\'','deletion')
+	execute('show status like \'%threads%\'','')
+	execute('show status like \'%delayed%\'','')
+	execute('show status like \'%key%\'','')
+	execute('show status like \'%slow%\'','')
+	execute('show status like \'%uptime%\'','')
