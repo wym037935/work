@@ -4,9 +4,15 @@ import re
 import os
 import sys,urllib
 
-def init(password):
+import wymlog
+import logging
+import mod_config
+
+logger = wymlog.Logger('mysql_log.txt','mysql').getlog()
+
+def init():
 	try:
-		conn = MySQLdb.connect(host='127.0.0.1',user='root',passwd=password,port=3306)
+		conn = MySQLdb.connect(host=mod_config.getConfig("database","dbhost"),user=mod_config.getConfig("database","dbuser"),passwd=mod_config.getConfig("database","dbpassword"),port=int(mod_config.getConfig("database","dbport")))
 		cur = conn.cursor()
 		cur.execute('create database if not exists cron_test')
 		conn.select_db('cron_test')
@@ -15,12 +21,13 @@ def init(password):
 		cur.close()
 		conn.close()
 	except MySQLdb.Error,e:
-		return "Mysql Error %d: %s" % (e.args[0], e.args[1])
-	return "The connection is successful!"
+		logger.error("Mysql Error %d: %s" % (e.args[0], e.args[1]))
+	logger.debug("The connection is successful!")
 
-def execute(password,command,name):
+def execute(command,name):
 	try:
-		conn = MySQLdb.connect(host='127.0.0.1',user='root',passwd=password,port=3306)
+		#conn = MySQLdb.connect(host='127.0.0.1',user='root',passwd=password,port=3306)
+		conn = MySQLdb.connect(host=mod_config.getConfig("database","dbhost"),user=mod_config.getConfig("database","dbuser"),passwd=mod_config.getConfig("database","dbpassword"),port=int(mod_config.getConfig("database","dbport")))
 		cur = conn.cursor()
 		conn.select_db('cron_test')
 		cur.execute(command)
@@ -28,12 +35,11 @@ def execute(password,command,name):
 		cur.close()
 		conn.close()
 	except MySQLdb.Error,e:
-		return "Mysql Error %d: %s" % (e.args[0], e.args[1])
-	return "The %s is successful!" %(name)
+		logger.error("Mysql Error %d: %s" % (e.args[0], e.args[1]))
+	logger.debug("The %s is successful!" %(name))
 
-password='cxq940215'
-print init(password)
-print execute(password,'insert into test(u,v) value(\'wym\',\'510\')','insertion')
-print execute(password,'select * from test','selection')
-print execute(password,'update test set u=\'510\' where u=\'wym\'','modification')
-print execute(password,'delete from test where v=\'510\'','deletion')
+init()
+execute('insert into test(u,v) value(\'wym\',\'510\')','insertion')
+execute('select * from test','selection')
+execute('update test set u=\'510\' where u=\'wym\'','modification')
+execute('delete from test where v=\'510\'','deletion')

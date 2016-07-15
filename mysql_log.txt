@@ -1,0 +1,5 @@
+2016-07-15 11:58:20,953-mysql-DEBUG-The connection is successful!
+2016-07-15 11:58:20,956-mysql-DEBUG-The insertion is successful!
+2016-07-15 11:58:20,958-mysql-DEBUG-The selection is successful!
+2016-07-15 11:58:20,963-mysql-DEBUG-The modification is successful!
+2016-07-15 11:58:21,020-mysql-DEBUG-The deletion is successful!
