@@ -31,11 +31,15 @@ def execute(command,name):
 		cur = conn.cursor()
 		conn.select_db('cron_test')
 		cur.execute(command)
+		tmp = cur.fetchall()
 		conn.commit()
 		cur.close()
 		conn.close()
 	except MySQLdb.Error,e:
 		logger.error("Mysql Error %d: %s" % (e.args[0], e.args[1]))
+		return
+	if(name ==''):
+		return tmp
 	logger.debug("The %s is successful!" %(name))
 
 init()
@@ -43,3 +47,9 @@ execute('insert into test(u,v) value(\'wym\',\'510\')','insertion')
 execute('select * from test','selection')
 execute('update test set u=\'510\' where u=\'wym\'','modification')
 execute('delete from test where v=\'510\'','deletion')
+tmp=execute('show status','')
+for i in tmp:
+	ll = ''
+	for j in i:
+		ll=ll + ' ' + j
+	logger.info(ll)
