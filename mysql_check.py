@@ -27,20 +27,22 @@ def init():
         conn.commit()
         cur.close()
         conn.close()
+        
         fields.update({
             "status_code": 200,
             "response_time": time.time() - start,
             "success": 1,
         })
+        
+        logger.debug("The connection is successful!")
     except MySQLdb.Error, e:
         fields.update({
             "status_code": int(e.args[0]),
-            "response_time": time.time - start,
+            "response_time": time.time() - start,
             "success": 0,
         })
         logger.error("Mysql Error %d: %s" % (e.args[0], e.args[1]))
     
-    logger.debug("The connection is successful!")
     tags.update({
         "from_host": mod_config.getConfig("database", "dbhost"),
         "url": 'mysql_init',
@@ -77,23 +79,24 @@ def execute(command, name):
             "success": 1,
         })
 
+        if name == '':
+            name = 'status'
+            for i in result:
+                log_info = ''
+                for j in i:
+                    log_info = log_info + ' ' + j
+                logger.info(log_info)
+        else:
+            logger.debug("The %s is successful!" % (name))
+
     except MySQLdb.Error, e:
         fields.update({
             "status_code": int(e.args[0]),
-            "response_time": time.time - start,
+            "response_time": time.time() - start,
             "success": 0,
         })
         logger.error("Mysql Error %d: %s" % (e.args[0], e.args[1]))
 
-    if name == '':
-        name = 'status'
-        for i in result:
-            log_info = ''
-            for j in i:
-                log_info = log_info + ' ' + j
-            logger.info(log_info)
-    else:
-        logger.debug("The %s is successful!" % (name))
     
     tags.update({
         "from_host": mod_config.getConfig("database", "dbhost"),
